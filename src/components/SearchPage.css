@@ -1,0 +1,22 @@
+.search-page .search-area {
+  position: sticky;
+  top: 1px;
+  background-color: var(--site-bg);
+  z-index: 2;
+}
+
+.search-page .result-item {
+  width: 100%;
+  margin: 4px;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: 40px 40px 1fr 100px;
+  align-items: center;
+  column-gap: 1em;
+}
+
+.search-page .result-item.selected {
+  margin: 2px;
+  border: 2px solid var(--secondary);
+  border-radius: 10px;
+}

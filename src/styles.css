@@ -1,0 +1,263 @@
+
+
+:root {
+  --blue: #007bff;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --primary: #007bff !important;
+  --secondary: #28a745;
+  --ternary: #28a745;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #6610f2;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --site-bg: #141414;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--site-bg);
+  font-family: 'Montserrat', -apple-system, system-ui, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: #778298;
+}
+
+h1 {
+  color: var(--primary);
+}
+h2 {
+  color: var(--secondary);
+}
+
+.btn {
+  letter-spacing: 1px;
+  font-weight: 700;
+  font-size: large;
+}
+
+.btn-primary {
+  color: #000;
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-outline-primary {
+  color: var(--primary);
+  background-color: var(--site-bg);
+  border-color: var(--primary);
+  
+}
+.btn-secondary {
+  color: #000;
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+}
+
+.btn-outline-secondary {
+  color: var(--light);
+  background-color: var(--site-bg);
+  border-color: var(--secondary);
+}
+
+.btn:active {
+  background-color: var(--ternary);
+
+}
+.btn:hover {
+  background-color: var(--ternary);
+}
+
+.btn:active {
+  
+  background-color: var(--ternary);
+}
+.btn:focus {
+  outline-color: var(--ternary);
+}
+
+.btn-icon {
+  background-color: transparent;
+  border: none;
+  padding-left: 4px;
+  color: white;
+}
+.btn-icon:hover{
+  color: var(--primary);
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login .btn {
+  font-size: 1.2rem;
+}
+
+.main {
+  width: 90%;
+  margin: 2rem auto;
+}
+
+.form-control {
+  font-size: 1.2rem;
+}
+
+.main-heading {
+  margin: 2rem 0;
+}
+
+.hide {
+  display: none;
+}
+
+.active {
+  border: 2px solid #566273;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-top: 10%;
+  font-size: 150%;
+}
+
+.load-more {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.load-more button {
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  letter-spacing: 1px;
+  outline: none;
+}
+
+#loader {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 99999;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.4)
+  );
+}
+
+.message {
+  position: relative;
+  font-size: 150%;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-10%);
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.loader-open {
+  overflow: hidden;
+}
+
+.errorMsg {
+  color: #f21e08;
+  background: #fff0f0;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.search-buttons {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-buttons .btn {
+  margin: 0.8rem;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  font-weight: bold;
+  color: #778298;
+}
+
+.search-buttons .btn:focus {
+  box-shadow: none;
+}
+
+.albums,
+.artists,
+.playlist {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  margin: 1rem;
+  box-shadow: 0 2px 7px 3px #949ca5;
+}
+
+.card .card-image-link {
+  padding: 1rem;
+  text-align: center;
+}
+
+.card img {
+  max-width: 250px;
+  height: 250px;
+}
+
+@media screen and (max-width: 400px) {
+  .search-buttons {
+    flex-direction: column;
+  }
+  .search-buttons .btn {
+    margin: 0.6rem;
+  }
+  .card img {
+    height: auto;
+  }
+  .main-heading {
+    text-align: center;
+  }
+}

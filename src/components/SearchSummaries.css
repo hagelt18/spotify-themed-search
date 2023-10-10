@@ -1,0 +1,6 @@
+.SearchSummaryDetailLine {
+  font-size: 10px;
+  display: grid;
+  grid-template-columns: 46px 68px 1fr;
+  column-gap: 4px;
+}
