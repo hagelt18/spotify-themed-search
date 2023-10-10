@@ -2,7 +2,6 @@ import React from 'react';
 import { Alert } from 'react-bootstrap';
 // import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import Header from './Header';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../context/authContext';
 
@@ -38,7 +37,6 @@ const Home = (props: HomeProps) => {
         <Navigate to="/search" />
       ) : (
         <div className="login">
-          <Header />
           {sessionExpired && (
             <Alert variant="info">Session expired. Please login again.</Alert>
           )}

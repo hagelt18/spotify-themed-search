@@ -24,7 +24,7 @@
     "react-spotify-web-playback": "^0.14.0",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
-    "typescript": "^5.2.2"
+    "typescript": "^3.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -49,5 +49,8 @@
   },
   "engines": {
     "node": "16"
+  },
+  "devDependencies": {
+    "@types/react-redux": "^7.1.27"
   }
 }

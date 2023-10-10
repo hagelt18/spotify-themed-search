@@ -17,7 +17,7 @@ export const SearchResults = (props: SearchResultsProps) => {
   const { results, selectedItem } = useSelector<AppState>((store) => store.search) as SearchState;  
   
   const filteredResults = useMemo(() => {
-    const applyFilter = (props.hideListenedToItems || results?.filters?.excludeArtistNames?.length || results?.filters?.excludeKeywords?.length);
+    const applyFilter = Boolean(props.hideListenedToItems || results?.filters?.excludeArtistNames?.length || results?.filters?.excludeKeywords?.length);
     if (!applyFilter || !results){
       return results;
     }
