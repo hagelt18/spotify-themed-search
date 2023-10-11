@@ -1,10 +1,10 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from '../components/Home';
-import RedirectPage from '../components/RedirectPage';
-import SearchPage from '../components/SearchPage';
-import NotFoundPage from '../components/NotFoundPage';
-import { AuthContext } from '../context/authContext';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "../components/Home";
+import RedirectPage from "../components/RedirectPage";
+import SearchPage from "../components/SearchPage";
+import NotFoundPage from "../components/NotFoundPage";
+import { AuthContext } from "../context/authContext";
 
 class AppRouter extends React.Component {
   state = {
@@ -15,7 +15,9 @@ class AppRouter extends React.Component {
   componentDidMount() {
     let expiryTime;
     try {
-      expiryTime = Number(JSON.parse(localStorage.getItem('expiry_time') || ''));
+      expiryTime = Number(
+        JSON.parse(localStorage.getItem("expiry_time") || ""),
+      );
     } catch (error) {
       expiryTime = 0;
     }
@@ -35,38 +37,31 @@ class AppRouter extends React.Component {
   };
 
   render() {
-    if (!this.state.mounted){
+    if (!this.state.mounted) {
       return null;
     }
     return (
       <div className="main">
-        <AuthContext.Provider value={{isValidSession: this.isValidSession, setExpiryTime: this.setExpiryTime}}>
+        <AuthContext.Provider
+          value={{
+            isValidSession: this.isValidSession,
+            setExpiryTime: this.setExpiryTime,
+          }}
+        >
           <BrowserRouter>
-            <Routes>          
-              <Route
-                path="/"
-              >
-                <Route index element={ <Home /> } />
-                <Route
-                  path="/redirect"
-                  element={
-                    <RedirectPage/>
-                  }
-                />
-                <Route
-                  path="/search"
-                  element={
-                    <SearchPage />
-                  }
-                />
-                
-                <Route element={<NotFoundPage/>} />
-              </Route>              
+            <Routes>
+              <Route path="/">
+                <Route index element={<Home />} />
+                <Route path="/redirect" element={<RedirectPage />} />
+                <Route path="/search" element={<SearchPage />} />
+
+                <Route element={<NotFoundPage />} />
+              </Route>
             </Routes>
-          </BrowserRouter>      
+          </BrowserRouter>
         </AuthContext.Provider>
       </div>
-    )
+    );
   }
 }
 
