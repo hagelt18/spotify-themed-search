@@ -11,7 +11,7 @@ const RedirectPage = () => {
   // const setExpiryTime = useParams();
   const { setExpiryTime } = useAuthContext();
 
-  useEffect(()=> {
+  useEffect(() => {
     // console.log("wow");
     // const { setExpiryTime, history, location } = this.props;
 
@@ -37,4 +37,4 @@ const RedirectPage = () => {
   return null;
 }
 
-export default  RedirectPage;
+export default RedirectPage;

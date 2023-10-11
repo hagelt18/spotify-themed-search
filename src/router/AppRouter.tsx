@@ -35,22 +35,22 @@ class AppRouter extends React.Component {
   };
 
   render() {
-    if (!this.state.mounted){
+    if (!this.state.mounted) {
       return null;
     }
     return (
       <div className="main">
-        <AuthContext.Provider value={{isValidSession: this.isValidSession, setExpiryTime: this.setExpiryTime}}>
+        <AuthContext.Provider value={{ isValidSession: this.isValidSession, setExpiryTime: this.setExpiryTime }}>
           <BrowserRouter>
-            <Routes>          
+            <Routes>
               <Route
                 path="/"
               >
-                <Route index element={ <Home /> } />
+                <Route index element={<Home />} />
                 <Route
                   path="/redirect"
                   element={
-                    <RedirectPage/>
+                    <RedirectPage />
                   }
                 />
                 <Route
@@ -59,11 +59,11 @@ class AppRouter extends React.Component {
                     <SearchPage />
                   }
                 />
-                
-                <Route element={<NotFoundPage/>} />
-              </Route>              
+
+                <Route element={<NotFoundPage />} />
+              </Route>
             </Routes>
-          </BrowserRouter>      
+          </BrowserRouter>
         </AuthContext.Provider>
       </div>
     )

@@ -13,22 +13,22 @@ import { SearchActionBar } from './SearchActionBar';
 import { SearchSummaries } from './SearchSummaries';
 import { SearchResults } from './SearchResults';
 
-export interface SearchPageProps {}
-const SearchPage = (props: SearchPageProps) => {  
+export interface SearchPageProps { }
+const SearchPage = (props: SearchPageProps) => {
   const navigate = useNavigate();
   const { isValidSession } = useAuthContext();
   const { theme, results, loading, error, selectedItem } = useSelector<AppState>((store) => store.search) as SearchState;
   // On mount
   useEffect(() => {
-    if (!isValidSession()){
+    if (!isValidSession()) {
       navigate('/');
     }
     return () => {
       // On unmount
     }
   }, [isValidSession, navigate])
-  const [hideListenedToItems, setHideListenedToItems] = useState(true);  
-  
+  const [hideListenedToItems, setHideListenedToItems] = useState(true);
+
 
   const spotifyAuthToken = getSpotifyAuthToken();
 
@@ -47,18 +47,18 @@ const SearchPage = (props: SearchPageProps) => {
           {!isValidSession() && (
             <div>
               <strong>SESSION EXPIRED</strong>
-              <Button onClick={()=>{navigate('/')}}>Reload</Button>
+              <Button onClick={() => { navigate('/') }}>Reload</Button>
             </div>
           )}
-          <SearchActionBar/>
-          {results && 
+          <SearchActionBar />
+          {results &&
             <>
-              <div style={{margin: '1em 0px'}}>Total Tracks: {results.tracks?.length} - Total Albums: {results.albums?.length}</div>
+              <div style={{ margin: '1em 0px' }}>Total Tracks: {results.tracks?.length} - Total Albums: {results.albums?.length}</div>
               {/* <FormCheck label="Hide listened" value={!hideListenedToItems ? 1 : 0} onChange={(e)=>{setHideListenedToItems(e.target.checked)}} default={1}/>  */}
-              <FormCheck label={`Hide listened (Tracks: ${tracksListenedCount}), Albums: ${albumsListenedCount})`} value={!hideListenedToItems ? 1 : 0} onChange={(e)=>{setHideListenedToItems(e.target.checked)}} /> 
+              <FormCheck label={`Hide listened (Tracks: ${tracksListenedCount}), Albums: ${albumsListenedCount})`} value={!hideListenedToItems ? 1 : 0} onChange={(e) => { setHideListenedToItems(e.target.checked) }} />
             </>
           }
-          
+
           {selectedItem &&
             <SpotifyPlayer
               token={spotifyAuthToken}
@@ -66,24 +66,24 @@ const SearchPage = (props: SearchPageProps) => {
               autoPlay={true}
             />
           }
-          <hr/>
+          <hr />
         </div>
-        {Boolean(loading) && <Spinner/>}
+        {Boolean(loading) && <Spinner />}
         {error && <Alert>An error occurred!</Alert>}
-        {results && 
-        <>
-          <div style={{display: 'flex'}}>
-            <div style={{width: '240px'}}>
-              <SearchSummaries/>
+        {results &&
+          <>
+            <div style={{ display: 'flex' }}>
+              <div style={{ width: '240px' }}>
+                <SearchSummaries />
+              </div>
+              <div style={{ flex: 1 }}>
+                <SearchResults hideListenedToItems={hideListenedToItems} />
+              </div>
             </div>
-            <div  style={{flex: 1}}>
-              <SearchResults hideListenedToItems={hideListenedToItems}/>
-            </div>
-          </div> 
-        </>}
-        
-    </div>
-    {/* <Modal show={themeSelectorOpen} onHide={() => {setThemeSelectorOpen(false)}}>
+          </>}
+
+      </div>
+      {/* <Modal show={themeSelectorOpen} onHide={() => {setThemeSelectorOpen(false)}}>
       <Modal.Header closeButton>
         <Modal.Title>Select a search theme</Modal.Title>
       </Modal.Header>

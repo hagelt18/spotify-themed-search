@@ -21,7 +21,7 @@ const Home = (props: HomeProps) => {
       'user-read-email',
       'user-read-private',
       'user-read-playback-state',
-      'user-modify-playback-state' 
+      'user-modify-playback-state'
     ];
     (window as any).location = `${REACT_APP_AUTHORIZE_URL}?client_id=${REACT_APP_CLIENT_ID}&redirect_uri=${REACT_APP_REDIRECT_URL}&response_type=token&show_dialog=true&scope=${encodeURIComponent(scopes.join(' '))}`;
   };
