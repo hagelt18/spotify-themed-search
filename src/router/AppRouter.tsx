@@ -5,33 +5,30 @@ import RedirectPage from '../components/RedirectPage';
 import SearchPage from '../components/SearchPage';
 import NotFoundPage from '../components/NotFoundPage';
 import { AuthContext } from '../context/authContext';
+import { getSpotifyAuthTokenData, isTokenExpired, refreshToken } from '../utils/auth';
 
 class AppRouter extends React.Component {
   state = {
-    expiryTime: 0,
     mounted: false,
   };
 
   componentDidMount() {
-    let expiryTime;
-    try {
-      expiryTime = Number(JSON.parse(localStorage.getItem('expiry_time') || ''));
-    } catch (error) {
-      expiryTime = 0;
-    }
-    this.setState({ expiryTime, mounted: true });
+    this.setState({ mounted: true });
   }
 
-  setExpiryTime = (expiryTime: number) => {
-    this.setState({ expiryTime });
-  };
-
   isValidSession = (): boolean => {
-    const currentTime = new Date().getTime();
-    const expiryTime = this.state.expiryTime;
-    const isSessionValid = currentTime < Number(expiryTime);
+    const spotifyTokenData = getSpotifyAuthTokenData();
+    if (!spotifyTokenData?.expires_on) {
+      console.log("Invalid session: Token is missing or doesn't have expiration value");
+      return false;
+    }
+    if (isTokenExpired()) {
+      // refreshToken();
+      return false;
+    }
 
-    return Boolean(isSessionValid);
+
+    return true;
   };
 
   render() {
@@ -40,7 +37,7 @@ class AppRouter extends React.Component {
     }
     return (
       <div className="main">
-        <AuthContext.Provider value={{ isValidSession: this.isValidSession, setExpiryTime: this.setExpiryTime }}>
+        <AuthContext.Provider value={{ isValidSession: this.isValidSession }}>
           <BrowserRouter>
             <Routes>
               <Route

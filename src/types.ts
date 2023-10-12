@@ -132,6 +132,16 @@ export interface SpotifySearchResults {
   results?: SpotifyApiSearchResult[];
 }
 
+export interface SpotifyToken {
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+  token_type: string;
+  expires_on: number; // Added
+  created_on: number; // Added
+}
+
 
 export interface ResultItem {
   uri: string;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setAuthHeader } from './functions';
+import { setAuthHeader } from './auth';
 
 export const get = async (url: string, params?: any) => {
   setAuthHeader();

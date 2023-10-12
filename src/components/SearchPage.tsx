@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { Alert, Button, FormCheck } from 'react-bootstrap';
 import SpotifyPlayer from 'react-spotify-web-playback';
-import { getSpotifyAuthToken } from '../utils/functions';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/authContext';
 import { useSelector } from 'react-redux';
@@ -12,6 +11,7 @@ import { SearchState } from '../reducers/searchReducer';
 import { SearchActionBar } from './SearchActionBar';
 import { SearchSummaries } from './SearchSummaries';
 import { SearchResults } from './SearchResults';
+import { getSpotifyAuthTokenData, refreshToken } from '../utils/auth';
 
 export interface SearchPageProps { }
 const SearchPage = (props: SearchPageProps) => {
@@ -20,7 +20,9 @@ const SearchPage = (props: SearchPageProps) => {
   const { theme, results, loading, error, selectedItem } = useSelector<AppState>((store) => store.search) as SearchState;
   // On mount
   useEffect(() => {
+    console.log("Loading Search Page");
     if (!isValidSession()) {
+      console.log("Invalid Session!");
       navigate('/');
     }
     return () => {
@@ -30,7 +32,7 @@ const SearchPage = (props: SearchPageProps) => {
   const [hideListenedToItems, setHideListenedToItems] = useState(true);
 
 
-  const spotifyAuthToken = getSpotifyAuthToken();
+  const spotifyAuthTokenData = getSpotifyAuthTokenData();
 
   const tracksListenedCount = useMemo(() => {
     return results?.tracks?.filter(t => t.listened).length || 0;
@@ -61,7 +63,7 @@ const SearchPage = (props: SearchPageProps) => {
 
           {selectedItem &&
             <SpotifyPlayer
-              token={spotifyAuthToken}
+              token={spotifyAuthTokenData?.access_token || ''}
               uris={[selectedItem.uri]}
               autoPlay={true}
             />
