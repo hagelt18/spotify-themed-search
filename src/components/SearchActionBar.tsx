@@ -125,9 +125,9 @@ export const SearchActionBar = () => {
       const loadedResults = JSON.parse(fileLoadedEvent.target.result) as FinalResults;
       loadedResults.tracks = loadedResults?.tracks ? removeDuplicateItems(loadedResults.tracks) : [];
       loadedResults.albums = loadedResults.albums ? removeDuplicateItems(loadedResults.albums) : [];
-      console.log("Loaded Results theme: ", loadedResults.theme)
+      console.log("Loaded Results theme: ", loadedResults.themeId)
       const defaultTheme = themes.themeList.find(t => t.id === themes.defaultThemeId) as Theme;
-      const loadedResultTheme = themes.themeList.find(t => t.id === loadedResults.theme) || defaultTheme;
+      const loadedResultTheme = themes.themeList.find(t => t.id === loadedResults.themeId) || defaultTheme;
       const loadedResultsSearchYear = loadedResults.searches?.[0]?.searchYear || newSearchYear
       const loadedSearchCriteria = getSearchCriteria(loadedResultTheme, loadedResultsSearchYear)
       setNewSearchTheme(loadedResultTheme);

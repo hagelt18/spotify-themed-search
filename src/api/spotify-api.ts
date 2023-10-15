@@ -59,7 +59,7 @@ export const addAllSearchCriteriaToResults = (searchCriteria: SearchCriteria, cu
   const { searchTypes, searchTerms, searchYear, themeId } = searchCriteria;
   if (!currentResults.searches) {
     currentResults.searches = [];
-    currentResults.theme = themeId;
+    currentResults.themeId = themeId;
   }
   for (let searchType of searchTypes) {
     for (let searchTerm of searchTerms) {

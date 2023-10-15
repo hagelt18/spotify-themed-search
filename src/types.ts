@@ -40,7 +40,7 @@ export interface SearchDetails {
 
 export interface FinalResults {
   searchTerm: string;
-  theme?: string;
+  themeId?: string;
   searches: SearchDetails[];
   tracks: Track[],
   albums: Album[],
