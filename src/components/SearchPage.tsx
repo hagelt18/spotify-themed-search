@@ -2,7 +2,7 @@ import './SearchPage.css';
 import React, { useState, useEffect, useMemo } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { Alert, Button, FormCheck } from 'react-bootstrap';
-import SpotifyPlayer from 'react-spotify-web-playback';
+// import SpotifyPlayer from 'react-spotify-web-playback';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/authContext';
 import { useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { SearchActionBar } from './SearchActionBar';
 import { SearchSummaries } from './SearchSummaries';
 import { SearchResults } from './SearchResults';
 import { getSpotifyAuthTokenData, refreshToken } from '../utils/auth';
+import { SpotifyWebPlayer } from './SpotifyWebPlayer';
 
 export interface SearchPageProps { }
 const SearchPage = (props: SearchPageProps) => {
@@ -39,7 +40,7 @@ const SearchPage = (props: SearchPageProps) => {
   }, results?.tracks)
   const albumsListenedCount = useMemo(() => {
     return results?.albums?.filter(t => t.listened).length || 0;
-  }, results?.albums)
+  }, [results?.albums])
 
   return (
     <>
@@ -62,11 +63,12 @@ const SearchPage = (props: SearchPageProps) => {
           }
 
           {selectedItem &&
-            <SpotifyPlayer
-              token={spotifyAuthTokenData?.access_token || ''}
-              uris={[selectedItem.uri]}
-              autoPlay={true}
-            />
+            // <SpotifyPlayer
+            //   token={spotifyAuthTokenData?.access_token || ''}
+            //   uris={[selectedItem.uri]}
+            //   autoPlay={true}
+            // />
+            <SpotifyWebPlayer />
           }
           <hr />
         </div>
