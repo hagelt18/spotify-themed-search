@@ -103,6 +103,9 @@ export interface SpotifyApiSearchTrack {
   uri: string;
   artists: SpotifyApiSearchArtist[];
   id: string;
+  duration_ms: string;
+  is_playable: string;
+  track_number: string;
 }
 
 export interface SpotifyApiSearchAlbum {
@@ -130,6 +133,25 @@ export interface SpotifyApiExternalUrls {
 export interface SpotifySearchResults {
   searchDetails: SearchDetails;
   results?: SpotifyApiSearchResult[];
+}
+
+export interface SpotifyAlbumDetails {
+  album_type: "album" | "single" | "compilation";
+  total_tracks: number;
+  available_markets: string[];
+  external_urls: SpotifyApiExternalUrls[];
+  href: string;
+  id: string;
+  images: SpotifyApiImage[];
+  release_date: string;
+  release_date_precision: "year" | "month" | "day";
+  restrictions: { reason: "market" | "product" | "explicit" }
+  type: 'album'
+  uri: string;
+  artists: SpotifyApiSearchArtist[]
+  tracks: SpotifyApiSearchResultGroup<SpotifyApiSearchTrack>;
+  genres: string[];
+  popularity: number; // The popularity of the album. The value will be between 0 and 100, with 100 being the most popular.
 }
 
 export interface SpotifyToken {

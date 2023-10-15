@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../store/store';
 import { SearchState } from '../reducers/searchReducer';
 import { searchComplete, setItemListened, setSelectedItem, updateFilters } from '../actions/searchActions';
-import { loadMore } from '../api/spotify-api';
+import { getAlbum, loadMore, playItem } from '../api/spotify-api';
 
 export interface SearchResultsProps {
   hideListenedToItems: boolean;
@@ -75,10 +75,20 @@ export const SearchResults = (props: SearchResultsProps) => {
     }));
   }
 
-  const onTrackClicked = (track: Track) => {
+  const onTrackClicked = async (track: Track) => {
+    const newSelectedItem = { uri: track.uri, track };
     if (selectedItem?.uri !== track.uri) {
       selectedItem && markItemListened(selectedItem);
       dispatch(setSelectedItem({ uri: track.uri, track }));
+    }
+    try {
+      if (newSelectedItem) {
+        // Always play the selected song, even if it is already the currently played song.
+        await playItem({ uris: [newSelectedItem.uri] });
+      }
+    } catch (err) {
+      console.log(err);
+      alert("Error playing song...");
     }
   }
 
@@ -94,10 +104,25 @@ export const SearchResults = (props: SearchResultsProps) => {
   }
 
 
-  const onAlbumClicked = (album: Album) => {
+  const onAlbumClicked = async (album: Album) => {
     if (selectedItem?.uri !== album.uri) {
       selectedItem && markItemListened(selectedItem);
       dispatch(setSelectedItem({ uri: album.uri, album }));
+    }
+    const newSelectedItem = { uri: album.uri, album };
+    if (selectedItem?.uri !== album.uri) {
+      selectedItem && markItemListened(selectedItem);
+      dispatch(setSelectedItem(newSelectedItem));
+    }
+    try {
+      if (newSelectedItem) {
+        const albumInfo = await getAlbum(album.id);
+        const uris: string[] = albumInfo.tracks?.items?.map(i => i.uri) || [];
+        await playItem({ uris });
+      }
+    } catch (err) {
+      console.log(err);
+      alert("Error playing song...");
     }
   }
 
@@ -150,7 +175,7 @@ export const SearchResults = (props: SearchResultsProps) => {
                   <Button style={{ borderRadius: '50%', width: '40px', height: '40px' }} onClick={() => { onAlbumClicked(album) }}>▶</Button>
                   <img src={album.image} alt="Album" style={{ width: '40px', height: '40px' }} />
                   <a href={album.link}><strong>"{album.name}" by {album.artists}</strong></a>
-                  <Button className="btn-icon" style={{ width: '24px', height: '24px' }} onClick={() => { onAlbumIgnore(album) }}><FaEyeSlash /></Button>
+                  <button className="btn-icon" style={{ width: '24px', height: '24px' }} onClick={() => { onAlbumIgnore(album) }}><FaEyeSlash /></button>
                 </div>
               );
             })}

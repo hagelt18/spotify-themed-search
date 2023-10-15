@@ -6,14 +6,17 @@ import { SearchState } from '../reducers/searchReducer';
 import './SpotifyWebPlayer.css';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { FaStepBackward, FaStepForward, FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
+import { getAlbum, playItem, updatePlaybackPosition } from '../api/spotify-api';
+import { usePrevious } from '../utils/usePrevious';
 
 export interface SpotifyPlayerProps { }
 export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
 
   const [player, setPlayer] = useState<Spotify.Player>();
-  const previouslyPlaying = useRef<Spotify.Track>()
   const [currentlyPlaying, setCurrentlyPlaying] = useState<Spotify.Track>();
+  const previouslyPlaying = usePrevious(currentlyPlaying);
   const [deviceId, setDeviceId] = useState<string>();
+  const previousDeviceId = usePrevious(deviceId);
   const [paused, setPaused] = useState(false);
   const [playbackPosition, setPlaybackPosition] = useState<number>(0);
   // const [timestamp, setTimestamp] = useState<number>(0);
@@ -37,18 +40,13 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
 
   // Currently playing song changed (even if not from within this app)
   useEffect(() => {
-    if (!currentlyPlaying || !player) {
-      delete previouslyPlaying.current;
-      return;
-    }
-    if (currentlyPlaying.id !== previouslyPlaying.current?.id) {
+    if (currentlyPlaying?.id !== previouslyPlaying?.id) {
       console.log('Currently playing song changed: ', currentlyPlaying);
       if (currentInterval.current) {
         clearInterval(currentInterval.current)
       }
       currentInterval.current = setInterval(onInterval, intervalMs)
     }
-    previouslyPlaying.current = currentlyPlaying;
   }, [currentlyPlaying])
 
   // Update song time tracker control
@@ -134,27 +132,39 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
   }
 
   useEffect(() => {
-    if (deviceId && selectedItem) {
-      console.log("Selected item changed. Now playing: ", selectedItem);
+    // Play the selected song on initial load
+    if (deviceId && selectedItem && (previousDeviceId !== deviceId)) {
+      console.log("Device Id changed, playing song on current device: ", selectedItem);
       playSelectedItem();
     }
   }, [deviceId, selectedItem]);
 
   const playSelectedItem = async () => {
-    const authTokenData = getSpotifyAuthTokenData();
-    const url = "https://api.spotify.com/v1/me/player/play?device_id=" + deviceId;
-    try {
-      await fetch(url, {
-        method: "PUT",
-        body: `{"uris": ["${selectedItem?.uri}"]}`,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${authTokenData?.access_token || ''}`,
+    if (selectedItem && deviceId) {
+      try {
+        if (selectedItem.track) {
+          await playItem({ uris: [selectedItem.uri], deviceId });
+        } else if (selectedItem.album) {
+          const album = await getAlbum(selectedItem.album.id);
+          const uris = album?.tracks?.items?.map(i => i.uri) || [];
+          await playItem({ uris, deviceId });
         }
-      });
-    } catch (err) {
-      console.log(err);
-      alert("Error playing song...");
+      } catch (err) {
+        console.log(err);
+        alert("Error playing song...");
+      }
+    }
+  }
+
+  const onPlaybackPositionChanged = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (deviceId) {
+      try {
+        const newPosition = Number(e.target.value);
+        await updatePlaybackPosition({ deviceId, playbackPosition: newPosition });
+      } catch (err) {
+        console.log(err);
+        alert("Error playing song...");
+      }
     }
   }
 
@@ -176,35 +186,35 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
               <div className="spotify-web-player-track-description" style={{ fontSize: '12px' }}>
                 "{currentlyPlaying?.name}" by {currentlyPlaying?.artists.map(a => a.name)?.join(', ') || ''}
               </div>
-              <div style={{ width: '100%', display: 'flex', gap: '4px' }}>
+              <div style={{ width: '100%', display: 'flex', gap: '4px', marginLeft: '10px', marginRight: '10px', fontSize: '14px' }}>
                 <div>{getDisplayTime(playbackPosition)}</div>
-                <Form.Range min={0} max={duration} ref={rangeRef} style={{ flex: 1 }} />
+                <Form.Range min={0} max={duration} ref={rangeRef} style={{ flex: 1 }} onChange={onPlaybackPositionChanged} />
                 <div>{getDisplayTime(duration)}</div>
               </div>
 
 
               <div style={{ width: '100%', textAlign: 'center' }}>
-                <Button
+                <button
                   className="btn-icon"
-                  style={{ width: '50px', height: '50px' }}
+                  style={{ width: '30px', height: '30px' }}
                   onClick={() => { player.previousTrack() }}>
                   <FaStepBackward />
-                </Button>
-                <Button
+                </button>
+                <button
                   className="btn-icon"
-                  style={{ width: '50px', height: '50px' }}
+                  style={{ width: '30px', height: '30px', marginLeft: '10px', marginRight: '10px' }}
                   onClick={() => {
                     console.log("Play/Pause Clicked");
                     player.togglePlay()
                   }}>
                   {!paused ? <FaPauseCircle /> : <FaPlayCircle />}
-                </Button>
-                <Button
+                </button>
+                <button
                   className="btn-icon"
-                  style={{ width: '50px', height: '50px' }}
+                  style={{ width: '30px', height: '30px' }}
                   onClick={() => { player.nextTrack() }}>
                   <FaStepForward />
-                </Button>
+                </button>
               </div>
 
             </div>
