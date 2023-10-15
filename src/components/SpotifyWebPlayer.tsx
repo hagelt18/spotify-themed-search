@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { AppState } from '../store/store';
 import { SearchState } from '../reducers/searchReducer';
 import './SpotifyWebPlayer.css';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Spinner } from 'react-bootstrap';
 import { FaStepBackward, FaStepForward, FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 
 export interface SpotifyPlayerProps { }
@@ -19,6 +19,7 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
   // const [timestamp, setTimestamp] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [active, setActive] = useState(false);
+  const [loading, setLoading] = useState(true);
   const mounted = useRef<boolean>(false);
   const { selectedItem } = useSelector<AppState>((store) => store.search) as SearchState;
 
@@ -96,6 +97,7 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
     // setTimestamp(state.timestamp);
     setPlaybackPosition(state.position);
     setCurrentlyPlaying(state.track_window.current_track);
+    setLoading(state.loading);
 
     player?.getCurrentState().then(state => {
       setActive(Boolean(state));
@@ -161,8 +163,14 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
       {player ?
         (
           <div style={{ display: 'flex', gap: '4px' }}>
-            <img src={currentlyPlaying?.album.images[0].url}
-              className="spotify-web-player-artwork" alt="" />
+            <div className='spotify-web-player-artwork flex-center'>
+              {loading
+                // ? <Spinner style={{ width: '100%', height: '100%', margin: '50px' }} />
+                ? <Spinner />
+                : <img src={currentlyPlaying?.album.images[0].url} alt="album artwork" style={{ width: '100%', height: '100%' }} />
+              }
+            </div>
+
 
             <div className="spotify-web-player-control-area" style={{ flex: 1, textAlign: 'center' }}>
               <div className="spotify-web-player-track-description" style={{ fontSize: '12px' }}>
@@ -203,7 +211,9 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
 
           </div>
         ) : (
-          <div>Player not loaded</div>
+          <div>
+            {loading ? <Spinner /> : <span>Player not loaded</span>}
+          </div>
         )}
     </div>
   )

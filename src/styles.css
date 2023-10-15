@@ -155,6 +155,11 @@ h2 {
 .active {
   border: 2px solid #566273;
 } */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .loading {
   display: flex;

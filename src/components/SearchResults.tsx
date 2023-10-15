@@ -114,7 +114,7 @@ export const SearchResults = (props: SearchResultsProps) => {
     <>
       <Tabs defaultActiveKey="tab-tracks">
         <Tab eventKey='tab-tracks' title='Tracks' key='tab-tracks'>
-          <div style={{}}>
+          <div style={{ marginTop: '10px' }}>
             {filteredResults?.tracks?.map(track => {
               const isSelected = selectedItem && selectedItem?.uri === track.uri;
               return (
@@ -126,8 +126,8 @@ export const SearchResults = (props: SearchResultsProps) => {
                     {track.listened ? ' (listened)' : ''}
                   </a>
                   <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap' }}>
-                    <button className='btn-icon' style={{ width: '40px', height: '40px' }} onClick={() => { onTrackIgnore(track) }}><FaEyeSlash /></button>
-                    <button className='btn-icon' style={{ width: '40px', height: '40px' }} onClick={() => { onArtistIgnore(track) }}><FaUserSlash /></button>
+                    <button className='btn-icon' style={{ width: '24px', height: '24px' }} onClick={() => { onTrackIgnore(track) }}><FaEyeSlash /></button>
+                    <button className='btn-icon' style={{ width: '24px', height: '24px' }} onClick={() => { onArtistIgnore(track) }}><FaUserSlash /></button>
                   </div>
                 </div>
               );
@@ -150,7 +150,7 @@ export const SearchResults = (props: SearchResultsProps) => {
                   <Button style={{ borderRadius: '50%', width: '40px', height: '40px' }} onClick={() => { onAlbumClicked(album) }}>▶</Button>
                   <img src={album.image} alt="Album" style={{ width: '40px', height: '40px' }} />
                   <a href={album.link}><strong>"{album.name}" by {album.artists}</strong></a>
-                  <Button className="btn-icon" style={{ width: '40px', height: '40px' }} onClick={() => { onAlbumIgnore(album) }}><FaEyeSlash /></Button>
+                  <Button className="btn-icon" style={{ width: '24px', height: '24px' }} onClick={() => { onAlbumIgnore(album) }}><FaEyeSlash /></Button>
                 </div>
               );
             })}
