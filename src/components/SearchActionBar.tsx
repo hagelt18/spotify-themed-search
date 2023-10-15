@@ -4,7 +4,7 @@ import { Button, Form, Col, Row } from 'react-bootstrap';
 import { executeInitialSearch, addToFinalResults, addAllSearchCriteriaToResults, initializeFinalResults } from '../api/spotify-api';
 import themes from '../utils/searchThemes';
 import { useAuthContext } from '../context/authContext';
-import { SearchCriteria, SearchType, Theme } from '../types';
+import { Album, FinalResults, ResultItem, SearchCriteria, SearchItem, SearchType, Theme, Track } from '../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../store/store';
 import { SearchState } from '../reducers/searchReducer';
@@ -98,6 +98,23 @@ export const SearchActionBar = () => {
     saveFileInput.current && saveFileInput.current.click();
   }
 
+  const removeDuplicateItems = (itemList: SearchItem[]) => {
+    const newList = [...itemList];
+    for (let i = newList.length - 1; i >= 0; i--) {
+      let count = 0;
+      for (let n = itemList.length - 1; n >= 0; n--) {
+        if (itemList[n]?.id === newList[i].id) {
+          count++;
+        }
+        if (count >= 2) {
+          console.log("Removing duplicate: ", itemList[n]);
+          newList.splice(i);
+          break;
+        }
+      }
+    }
+    return newList;
+  }
   const onLoadDataFromFile = (e: any) => {
     setShowNewSearchCriteria(false);
     const file = e.target.files[0];
@@ -105,10 +122,12 @@ export const SearchActionBar = () => {
     var fileReader = new FileReader();
     fileReader.onload = function (fileLoadedEvent: any) {
 
-      const loadedResults = JSON.parse(fileLoadedEvent.target.result);
-      console.log("Loaded Results theme: ", loadedResults.themeId)
+      const loadedResults = JSON.parse(fileLoadedEvent.target.result) as FinalResults;
+      loadedResults.tracks = loadedResults?.tracks ? removeDuplicateItems(loadedResults.tracks) : [];
+      loadedResults.albums = loadedResults.albums ? removeDuplicateItems(loadedResults.albums) : [];
+      console.log("Loaded Results theme: ", loadedResults.theme)
       const defaultTheme = themes.themeList.find(t => t.id === themes.defaultThemeId) as Theme;
-      const loadedResultTheme = themes.themeList.find(t => t.id === loadedResults.themeId) || defaultTheme;
+      const loadedResultTheme = themes.themeList.find(t => t.id === loadedResults.theme) || defaultTheme;
       const loadedResultsSearchYear = loadedResults.searches?.[0]?.searchYear || newSearchYear
       const loadedSearchCriteria = getSearchCriteria(loadedResultTheme, loadedResultsSearchYear)
       setNewSearchTheme(loadedResultTheme);
@@ -156,11 +175,11 @@ export const SearchActionBar = () => {
       <div style={{ display: showNewSearchCriteria ? 'block' : 'none', marginTop: '10px', padding: '10px', border: '1px solid blue' }}>
         <Form>
           <Row className="mb-3">
-            <Form.Group as={Col} controlId="searchButton" style={{ maxWidth: 'fit-content', height: '100%' }}>
+            <Form.Group as={Col} id="searchButton" style={{ maxWidth: 'fit-content', height: '100%' }}>
               <Button name="searchButton" variant="outline-primary" style={{ flex: 1 }} onClick={handleSearch}>Search</Button>
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Group as={Col} controlId="themeSelector">
+              <Form.Group as={Col} id="themeSelector">
                 <Form.Label>Theme</Form.Label>
                 <Form.Select onChange={handleThemeChange} value={newSearchTheme.id}>
                   {themes.themeList.map((t) =>
@@ -174,8 +193,8 @@ export const SearchActionBar = () => {
                                 </select> */}
               </Form.Group>
             </Form.Group>
-            <Form.Group as={Col} controlId="searchYear">
-              <Form.Label controlId="searchYear">Year</Form.Label>
+            <Form.Group as={Col} id="searchYear">
+              <Form.Label id="searchYear">Year</Form.Label>
               <Form.Control
                 type="search"
                 name="searchYear"

@@ -52,7 +52,7 @@ export const SearchSummaries = () => {
 
 
   return (
-    <div className='SearchSummaries'>
+    <div className='SearchSummaries' >
       <h2>Searches</h2>
       {groupedSearches?.groupList?.map(searchGroup => (
         // <div key={searchGroup?.searchTerm}>

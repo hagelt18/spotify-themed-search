@@ -63,7 +63,7 @@ export interface SearchGroup {
   searches: SearchDetails[];
 }
 
-export interface SearchGroupItem {
+export interface SearchItem {
   listened?: boolean;
   name: string;
   image?: string;
@@ -74,11 +74,11 @@ export interface SearchGroupItem {
   releaseDate?: string;
   dateLoaded: string;
 }
-export interface Track extends SearchGroupItem {
+export interface Track extends SearchItem {
   album?: string;
 }
 
-export interface Album extends SearchGroupItem {
+export interface Album extends SearchItem {
 }
 
 export interface SpotifyApiSearchResult {

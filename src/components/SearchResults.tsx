@@ -2,7 +2,7 @@ import './SearchPage.css';
 import React, { useMemo } from 'react';
 import { Button, Tab, Tabs } from 'react-bootstrap';
 import { FaEyeSlash, FaUserSlash } from 'react-icons/fa';
-import { ResultItem, Album, SearchGroupItem, Track, SearchDetails, SearchType } from '../types';
+import { ResultItem, Album, SearchItem, Track, SearchDetails, SearchType } from '../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../store/store';
 import { SearchState } from '../reducers/searchReducer';
@@ -22,7 +22,7 @@ export const SearchResults = (props: SearchResultsProps) => {
       return results;
     }
 
-    const filter = (item: SearchGroupItem) => {
+    const filter = (item: SearchItem) => {
       if (props.hideListenedToItems && item.listened) {
         return false;
       }
@@ -133,7 +133,11 @@ export const SearchResults = (props: SearchResultsProps) => {
               );
             })}
             {filteredResults?.tracks.length === 0 && nextTrackSearchToRun &&
-              <Button variant="outline-primary" onClick={() => onLoadMoreTracksClicked()} />
+              <div style={{ width: '100%', height: '100%', textAlign: 'center' }}>
+                <h3>No results to display</h3>
+                <div>All current results have either been listened to or are filtered out</div>
+                <Button variant="outline-primary" onClick={() => onLoadMoreTracksClicked()} >Load More</Button>
+              </div>
             }
           </div>
         </Tab>
@@ -151,7 +155,11 @@ export const SearchResults = (props: SearchResultsProps) => {
               );
             })}
             {filteredResults?.albums.length === 0 && nextAlbumSearchToRun &&
-              <Button variant="outline-primary" onClick={() => onLoadMoreAlbumsClicked()}>Load More</Button>
+              <div style={{ width: '100%', height: '100%', textAlign: 'center', marginTop: '20px' }}>
+                <h3>No results to display</h3>
+                <div>All current results have either been listened to or are filtered out</div>
+                <Button style={{ margin: '10px' }} variant="outline-primary" onClick={() => onLoadMoreAlbumsClicked()}>Load More</Button>
+              </div>
             }
           </div>
         </Tab>
