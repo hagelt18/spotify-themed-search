@@ -33,11 +33,9 @@ const SearchPage = (props: SearchPageProps) => {
   const [hideListenedToItems, setHideListenedToItems] = useState(true);
 
 
-  const spotifyAuthTokenData = getSpotifyAuthTokenData();
-
   const tracksListenedCount = useMemo(() => {
     return results?.tracks?.filter(t => t.listened).length || 0;
-  }, results?.tracks)
+  }, [results?.tracks])
   const albumsListenedCount = useMemo(() => {
     return results?.albums?.filter(t => t.listened).length || 0;
   }, [results?.albums])
