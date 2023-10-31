@@ -64,7 +64,7 @@ const searchReducer = (state: SearchState = initialState, action: SearchReducerA
         let newResults: FinalResults | undefined = state.results;
         if (currentResults && item?.track) {
           const actualItemIndex = currentResults?.tracks.findIndex(t => t.id === item.track?.id);
-          if (actualItemIndex) {
+          if (actualItemIndex != undefined) {
             const newTrackList: Track[] = [...(currentResults?.tracks || []).map(t => ({ ...t }))];
             newTrackList[actualItemIndex].listened = true;
             newResults = { ...currentResults, tracks: newTrackList }
@@ -74,9 +74,13 @@ const searchReducer = (state: SearchState = initialState, action: SearchReducerA
         }
         if (currentResults && item?.album) {
           const actualItemIndex = currentResults?.albums.findIndex(t => t.id === item.album?.id);
-          const newItemList = [...(currentResults?.albums || []).map(a => ({ ...a }))];
-          newItemList[actualItemIndex].listened = true;
-          newResults = { ...currentResults, albums: newItemList }
+          if (actualItemIndex != undefined) {
+            const newItemList = [...(currentResults?.albums || []).map(a => ({ ...a }))];
+            newItemList[actualItemIndex].listened = true;
+            newResults = { ...currentResults, albums: newItemList }
+          } else {
+            console.warn("Unable to find selected item by album id:", item.album?.id);
+          }
         }
         return {
           ...state,

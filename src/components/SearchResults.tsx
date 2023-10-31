@@ -138,7 +138,7 @@ export const SearchResults = (props: SearchResultsProps) => {
   return (
     <>
       <Tabs defaultActiveKey="tab-tracks">
-        <Tab eventKey='tab-tracks' title='Tracks' key='tab-tracks'>
+        <Tab eventKey='tab-tracks' title={`Tracks (${filteredResults?.tracks?.length ?? 0})`} key='tab-tracks'>
           <div style={{ marginTop: '10px' }}>
             {filteredResults?.tracks?.map(track => {
               const isSelected = selectedItem && selectedItem?.uri === track.uri;
@@ -166,7 +166,7 @@ export const SearchResults = (props: SearchResultsProps) => {
             }
           </div>
         </Tab>
-        <Tab eventKey='tab-albums' title='Albums' key='tab-albums'>
+        <Tab eventKey='tab-albums' title={`Albums (${filteredResults?.albums?.length ?? 0})`} key='tab-albums'>
           <div style={{}}>
             {filteredResults?.albums?.map(album => {
               const isSelected = selectedItem && selectedItem?.uri === album.uri;

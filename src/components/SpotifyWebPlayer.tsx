@@ -30,16 +30,30 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
   const currentInterval = useRef<any>();
   const intervalMs = 300;
   const onInterval = () => {
+    console.log('Playback position interval hit', {
+      paused,
+      rangeRefValue: rangeRef.current?.value,
+      duration
+    })
     if (!paused) {
-      setPlaybackPosition(c => c + intervalMs);
-    }
-    if (playbackPosition >= duration) {
-      clearInterval(currentInterval.current);
+      setPlaybackPosition(c => {
+        console.log(`Updateing position from ${c} to ${c + intervalMs}`)
+        if (c + intervalMs > duration) {
+          return duration;
+          // return 0;
+        } else {
+          return c + intervalMs;
+        }
+      });
     }
   };
 
   // Currently playing song changed (even if not from within this app)
   useEffect(() => {
+    restartPlaybackTracking();
+  }, [currentlyPlaying])
+
+  const restartPlaybackTracking = () => {
     if (currentlyPlaying?.id !== previouslyPlaying?.id) {
       console.log('Currently playing song changed: ', currentlyPlaying);
       if (currentInterval.current) {
@@ -47,7 +61,7 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
       }
       currentInterval.current = setInterval(onInterval, intervalMs)
     }
-  }, [currentlyPlaying])
+  }
 
   // Update song time tracker control
   useEffect(() => {
@@ -68,7 +82,7 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
       window.onSpotifyWebPlaybackSDKReady = () => {
         const authTokenData = getSpotifyAuthTokenData();
         const player = new window.Spotify.Player({
-          name: 'Web Playback SDK',
+          name: 'Spotify Themed Search',
           getOAuthToken: cb => { cb(authTokenData?.access_token || ''); },
           volume: 0.5
         });
