@@ -11,13 +11,13 @@ export interface HomeProps {
 
 }
 const Home = (props: HomeProps) => {
-  console.log("Landed on home page: ", process.env)
+  console.log("Landed on home page: ", import.meta.env)
   const {
-    REACT_APP_CLIENT_ID,
-  } = process.env;
+    VITE_APP_CLIENT_ID,
+  } = import.meta.env;
 
   const handleLogin = () => {
-    console.log("Handle Login", process.env)
+    console.log("Handle Login", import.meta.env)
     const scopes: string[] = [
       'streaming',
       'user-read-email',
@@ -31,7 +31,7 @@ const Home = (props: HomeProps) => {
 
     // const auth_query_parameters = new URLSearchParams({
     //   response_type: "code",
-    //   client_id: REACT_APP_CLIENT_ID || '',
+    //   client_id: VITE_APP_CLIENT_ID || '',
     //   // scope: encodeURIComponent(scopeString),
     //   scope: scopeString,
     //   redirect_uri: AUTH_REDIRECT_URL || '',
@@ -55,7 +55,7 @@ const Home = (props: HomeProps) => {
 
       let args = new URLSearchParams({
         response_type: 'code',
-        client_id: REACT_APP_CLIENT_ID || '',
+        client_id: VITE_APP_CLIENT_ID || '',
         scope: scopeString,
         redirect_uri: AUTH_REDIRECT_URL || '',
         state: state,

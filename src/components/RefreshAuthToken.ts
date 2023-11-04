@@ -8,8 +8,8 @@ const RedirectPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const {
-    REACT_APP_CLIENT_ID,
-  } = process.env;
+    VITE_APP_CLIENT_ID,
+  } = import.meta.env;
 
   const handleLogin = async () => {
     try {
@@ -30,7 +30,7 @@ const RedirectPage = () => {
         grant_type: 'authorization_code',
         code: code,
         redirect_uri: AUTH_REDIRECT_URL || '',
-        client_id: REACT_APP_CLIENT_ID || '',
+        client_id: VITE_APP_CLIENT_ID || '',
         code_verifier: codeVerifier
       });
       const response = await fetch(SPOTIFY_TOKEN_URL || '', {

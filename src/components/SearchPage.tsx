@@ -2,7 +2,6 @@ import './SearchPage.css';
 import React, { useState, useEffect, useMemo } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { Alert, Button, FormCheck } from 'react-bootstrap';
-// import SpotifyPlayer from 'react-spotify-web-playback';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/authContext';
 import { useSelector } from 'react-redux';

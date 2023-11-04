@@ -50,13 +50,13 @@ export const refreshToken = async () => {
   const spotifyAuthTokenData = getSpotifyAuthTokenData();
   var refresh_token = spotifyAuthTokenData?.refresh_token || '';
   const {
-    REACT_APP_CLIENT_ID,
-  } = process.env;
+    VITE_APP_CLIENT_ID,
+  } = import.meta.env;
 
   const body = new URLSearchParams({
     grant_type: 'refresh_token',
     refresh_token: refresh_token,
-    client_id: REACT_APP_CLIENT_ID || '',
+    client_id: VITE_APP_CLIENT_ID || '',
   });
   const response = await fetch(SPOTIFY_TOKEN_URL || '', {
     method: 'POST',
