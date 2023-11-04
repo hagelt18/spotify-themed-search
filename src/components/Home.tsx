@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-bootstrap';
+import { Alert, Spinner } from 'react-bootstrap';
 // import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { Navigate, useLocation } from 'react-router-dom';
@@ -70,22 +70,19 @@ const Home = (props: HomeProps) => {
   const { isValidSession } = useAuthContext();
   const location = useLocation();
   const { state } = location;
-  const sessionExpired = state && state.session_expired;
+  // const sessionExpired = state && state.session_expired;
 
+  if (!isValidSession()) {
+    handleLogin();
+  }
   return (
     <React.Fragment>
-      {isValidSession() ? (
-        <Navigate to="/search" />
-      ) : (
-        <div className="login">
-          {sessionExpired && (
-            <Alert variant="info">Session expired. Please login again.</Alert>
-          )}
-          <Button variant="info" type="submit" onClick={handleLogin}>
-            Login to spotify
-          </Button>
-        </div>
-      )}
+      {
+        isValidSession() ? (
+          <Navigate to="/search" />
+        ) : (
+          <Spinner />
+        )}
     </React.Fragment>
   );
 };
