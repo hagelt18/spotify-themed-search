@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../store/store';
 import { SearchState } from '../reducers/searchReducer';
 import { searchComplete, searchStart } from '../actions/searchActions';
+import { ToastType, createToast } from '../actions/toastActions';
 
 export const SearchActionBar = () => {
 
@@ -159,6 +160,13 @@ export const SearchActionBar = () => {
   return (
     <div>
       <div style={{ width: '100%', display: 'flex', flexDirection: 'row', gap: '2px' }}>
+        <button onClick={() => {
+          dispatch(
+            createToast({
+              message: "FUUUUKC",
+              type: ToastType.Error,
+            }));
+        }}>DO IT</button>
         <Button style={{ width: '100px' }} variant="primary" size="sm" onClick={() => { setShowNewSearchCriteria(!showNewSearchCriteria) }}>New</Button>
         <>
           {/* Load Results Button */}

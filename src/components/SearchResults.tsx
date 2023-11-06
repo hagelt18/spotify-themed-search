@@ -8,6 +8,7 @@ import { AppState } from '../store/store';
 import { SearchState } from '../reducers/searchReducer';
 import { searchComplete, setItemListened, setSelectedItem, updateFilters } from '../actions/searchActions';
 import { getAlbum, loadMore, playItem } from '../api/spotify-api';
+import { ToastType, createToast } from '../actions/toastActions';
 
 export interface SearchResultsProps {
   hideListenedToItems: boolean;
@@ -87,8 +88,11 @@ export const SearchResults = (props: SearchResultsProps) => {
         await playItem({ uris: [newSelectedItem.uri] });
       }
     } catch (err) {
-      console.log(err);
-      alert("Error playing song...");
+      console.log('Unable to play the selected song', { newSelectedItem, err });
+      dispatch(createToast({
+        message: "An Error occurred while trying to play the selected song",
+        type: ToastType.Error,
+      }));
     }
   }
 
@@ -121,8 +125,11 @@ export const SearchResults = (props: SearchResultsProps) => {
         await playItem({ uris });
       }
     } catch (err) {
-      console.log(err);
-      alert("Error playing song...");
+      console.log('Unable to play the selected album', { newSelectedItem, err });
+      dispatch(createToast({
+        message: "An Error occurred while trying to play the selected album",
+        type: ToastType.Error,
+      }));
     }
   }
 

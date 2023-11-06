@@ -7,8 +7,14 @@ export const get = async (url: string, params?: any) => {
   return result.data;
 };
 
-export const post = async (url: string, params?: any) => {
+export const post = async (url: string, data?: any) => {
   setAuthHeader();
-  const result = await axios.post(url, params);
+  const result = await axios.post(url, data);
+  return result.data;
+};
+
+export const put = async (url: string, data?: any) => {
+  setAuthHeader();
+  const result = await axios.put(url, data);
   return result.data;
 };

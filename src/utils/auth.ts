@@ -42,7 +42,8 @@ export const setAuthHeader = () => {
       ] = `Bearer ${authToken}`;
     }
   } catch (error) {
-    console.log('Error setting auth', error);
+    console.log('Unable to get spotify authentication token', error);
+    throw error;
   }
 };
 

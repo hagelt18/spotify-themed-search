@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { getSpotifyAuthTokenData } from '../utils/auth';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../store/store';
 import { SearchState } from '../reducers/searchReducer';
 import './SpotifyWebPlayer.css';
@@ -8,10 +8,12 @@ import { Button, Form, Spinner } from 'react-bootstrap';
 import { FaStepBackward, FaStepForward, FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { getAlbum, playItem, updatePlaybackPosition } from '../api/spotify-api';
 import { usePrevious } from '../utils/usePrevious';
+import { ToastType, createToast } from '../actions/toastActions';
 
 export interface SpotifyPlayerProps { }
 export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
 
+  const dispatch = useDispatch();
   const [player, setPlayer] = useState<Spotify.Player>();
   const [currentlyPlaying, setCurrentlyPlaying] = useState<Spotify.Track>();
   const previouslyPlaying = usePrevious(currentlyPlaying);
@@ -30,14 +32,14 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
   const currentInterval = useRef<any>();
   const intervalMs = 300;
   const onInterval = () => {
-    console.log('Playback position interval hit', {
-      paused,
-      rangeRefValue: rangeRef.current?.value,
-      duration
-    })
+    // console.log('Playback position interval hit', {
+    //   paused,
+    //   rangeRefValue: rangeRef.current?.value,
+    //   duration
+    // })
     if (!paused) {
       setPlaybackPosition(c => {
-        console.log(`Updateing position from ${c} to ${c + intervalMs}`)
+        // console.log(`Updateing position from ${c} to ${c + intervalMs}`)
         if (c + intervalMs > duration) {
           return duration;
           // return 0;
@@ -164,8 +166,11 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
           await playItem({ uris, deviceId });
         }
       } catch (err) {
-        console.log(err);
-        alert("Error playing song...");
+        console.log('Unable to play the selected song', { selectedItem, err });
+        dispatch(createToast({
+          message: "An Error occurred while trying to play the selected song",
+          type: ToastType.Error,
+        }));
       }
     }
   }
@@ -176,8 +181,11 @@ export const SpotifyWebPlayer = (props: SpotifyPlayerProps) => {
         const newPosition = Number(e.target.value);
         await updatePlaybackPosition({ deviceId, playbackPosition: newPosition });
       } catch (err) {
-        console.log(err);
-        alert("Error playing song...");
+        console.log('Unable to set the song playback position', { deviceId, newPosition: e.target?.value, err });
+        dispatch(createToast({
+          message: "Unable to set song playback position.",
+          type: ToastType.Error,
+        }));
       }
     }
   }

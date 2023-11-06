@@ -1,6 +1,7 @@
 import { FinalResults, SearchCriteria, Track, SearchDetails, SearchType, SpotifyApiSearchResult, NewResults, ResultItem, SpotifyAlbumDetails } from '../types';
-import { get } from '../utils/api';
+import { get, put, post } from '../utils/api';
 import { getSpotifyAuthTokenData } from '../utils/auth';
+import axios from 'axios';
 
 const SEARCH_LIMIT = 50;
 
@@ -211,59 +212,29 @@ export const addToFinalResults = (newSearchResults: NewResults[], finalResults: 
 const getSearchKey = (searchType: SearchType, searchTerm: string) => `${searchType}--${searchTerm}`;
 
 export const playItem = async ({ uris, deviceId }: { uris: string[], deviceId?: string }) => {
-  const authTokenData = getSpotifyAuthTokenData();
-
-  const params: any = {};
   let url = `https://api.spotify.com/v1/me/player/play`;
   if (deviceId) {
     url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`;
   }
-  await fetch(url, {
-    method: "PUT",
-    body: JSON.stringify({ uris: uris }),
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${authTokenData?.access_token || ''}`,
-    }
-  });
+  const body = JSON.stringify({ uris: uris });
+  await put(url, body);
 }
 
 export const updatePlaybackPosition = async ({ playbackPosition, deviceId }: { playbackPosition: number, deviceId: string }) => {
-  const authTokenData = getSpotifyAuthTokenData();
 
   let args = new URLSearchParams({
     position_ms: playbackPosition?.toString(),
     device_id: deviceId,
   });
 
-  // position_ms: playbackPosition?.toString()
   const url = `https://api.spotify.com/v1/me/player/seek?${args}`;
-  // const url = `https://api.spotify.com/v1/me/player/seek`;
-  await fetch(url, {
-    method: "PUT",
-    // body: JSON.stringify({
-    //   position_ms: playbackPosition,
-    //   device_id: deviceId,
-    // }),
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${authTokenData?.access_token || ''}`,
-    }
-  });
+  await put(url);
 }
 
 
 
 export const getAlbum = async (albumId: string): Promise<SpotifyAlbumDetails> => {
-  const authTokenData = getSpotifyAuthTokenData();
   const url = `https://api.spotify.com/v1/albums/${albumId}`;
-  const resultRaw = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${authTokenData?.access_token || ''}`,
-    }
-  });
-  const result = await resultRaw.json() as SpotifyAlbumDetails;
+  const result = await get(url) as SpotifyAlbumDetails;
   return result;
 }
